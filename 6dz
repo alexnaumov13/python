@@ -1,0 +1,79 @@
+from sympy import *
+import numpy as np
+import matplotlib.pyplot as plt
+
+# print('Введите число известных значений функции:')
+# n = int(input())
+
+
+X = np.array([-5,-4,-3,-2,-1, 0, 1, 2, 3, 4, 5, 6, 8, 10, 12])
+# Y = np.array([6, 6, 6, 4, 6, 4, 6, 4, 6, 4, 6, 4, 4, 5, 6, 7, 8])
+Y = np.array([-9,-10,-9,-8,-9,-9,-9,-7,-9,-3,-7,-4,-3,-1,1])
+n = len(X)
+table = np.zeros([n, 2])
+for i in range(n):
+    # print('введите x', i, ' y', i)
+    # for j in range(2):
+    table[i, 0] = X[i]
+    table[i, 1] = Y[i]
+
+print('Функция задана таблицей:')
+print(table)
+#создаем матрицу разделенных элементов
+razd_el = np.zeros([n, n])
+#копируем значения y0, тк разделенные разности 0 порядка есть значение функции
+for i in range(n):
+    razd_el[i, 0] = table[i, 1]
+#считаем все разделенные элементы
+#первый заход в цикл - сколько раз мы считаем по столбцам как бы
+i = 0
+j = 0
+for i in range(1, n):
+    for j in range(0, n-i):
+        razd_el[j, i] = (razd_el[j+1, i-1]-razd_el[j, i-1])/(table[i+j, 0]-table[j, 0])
+print('Таблица значений разделенных разностей')
+print(razd_el)
+print('Введите точку, в которой необходимо узнать значение функции:')
+# x = float(input())
+x = 11.5
+
+mn = razd_el[0, 0]
+p = 1
+for i in range(1, n):
+    p = p*(x-table[i-1, 0])
+    mn = mn+p*(razd_el[0, i])
+print ('Приближенное значение функции в этой точке - ', mn)
+#
+# def graph():
+#     x_scatter = np.zeros([n,1])
+#     y_scatter = np.zeros([n,1])
+#     for i in range(n):
+#         x_scatter[i] = table[i,0]
+#         y_scatter[i] = table[i, 1]
+#
+#     plt.scatter(x_scatter, y_scatter, marker='D', s=10, color='blue')
+#
+#     print("max x ", max(x_scatter))
+#     print("min x ", min(x_scatter))
+#
+#     x_min = min(x_scatter)
+#     x_max = max(x_scatter)
+#
+#     x = x_min
+#
+#     while x < x_max:
+#         mn = razd_el[0, 0]
+#         p = 1
+#         for i in range(1, n):
+#             p = p * (x - table[i - 1, 0])
+#             mn = mn + p * (razd_el[0, i])
+#         plt.scatter(x, mn, marker='D', s=1, color='red')
+#         x += 0.01
+#
+#
+#
+#     plt.show()
+#     # print(x_scatter,"\n")
+#     # print(y_scatter,"\n")
+#
+# graph()
